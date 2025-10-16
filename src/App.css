@@ -1,0 +1,265 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+header {
+  margin-bottom: 30px;
+  color: white;
+}
+
+header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.game-container {
+  background: white;
+  border-radius: 15px;
+  padding: 30px 48px; /* Increased horizontal padding */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  min-width: 340px;
+  margin: 0 auto;
+  /* Ensure consistent width when grid or game-over is shown */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+
+.guess-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.letter-box {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #d3d6da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 5px;
+  background-color: #ffffff;
+  /* Limit transitions to avoid flicker when animations start */
+  transition: transform 0.14s ease, background-color 0.14s ease, border-color 0.14s ease;
+  /* Improve 3D flip rendering and prevent border artifacts */
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, background-color, border-color;
+}
+
+.letter-box.current {
+  border-color: #878a8c;
+  animation: pop 0.1s ease-in-out;
+}
+
+.letter-box:focus {
+  outline: none;
+}
+
+.letter-box.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+  color: white;
+}
+
+.letter-box.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+  color: white;
+}
+
+.letter-box.absent {
+  background-color: #787c7e;
+  border-color: #787c7e;
+  color: white;
+}
+
+.letter-box.revealing {
+  /* Apply the first keyframe immediately (respects animationDelay) and keep the last */
+  animation: flip 0.4s ease both;
+  /* Ensure transitions don't fight the keyframe animation */
+  transition: none;
+}
+
+@keyframes pop {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+    background-color: white;
+    border-color: #d3d6da;
+  }
+  50% {
+    transform: rotateX(90deg);
+    background-color: white;
+    border-color: #d3d6da;
+  }
+  51% {
+    background-color: var(--tile-color);
+    border-color: var(--tile-color);
+    color: white;
+  }
+  100% {
+    transform: rotateX(0);
+    background-color: var(--tile-color);
+    border-color: var(--tile-color);
+    color: white;
+  }
+}
+
+  
+.instructions {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.instructions p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.instructions p {
+  margin: 5px 0;
+}
+
+/* Legend styles for HTML swatches instead of emojis */
+.legend {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 2px solid #d3d6da;
+}
+
+.legend-swatch.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+}
+
+.legend-swatch.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+}
+
+.legend-swatch.absent {
+  background-color: #ffffff;
+  border-color: #d3d6da;
+}
+
+/* Keyboard styles */
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.key {
+  min-width: 43px;
+  height: 58px;
+  border-radius: 4px;
+  border: none;
+  background-color: #d3d6da;
+  color: #000;
+  font-size: 0.875rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.08s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  user-select: none;
+}
+
+.key:hover {
+  opacity: 0.8;
+}
+
+.key:active {
+  transform: scale(0.95);
+}
+
+.key-wide {
+  min-width: 65px;
+  font-size: 0.75rem;
+}
+
+.key.correct {
+  background-color: #6aaa64;
+  color: white;
+}
+
+.key.present {
+  background-color: #c9b458;
+  color: white;
+}
+
+.key.absent {
+  background-color: #787c7e;
+  color: white;
+}

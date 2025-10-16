@@ -1,0 +1,47 @@
+/* Instructions styles */
+.instructions {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.instructions p {
+  margin: 5px 0;
+}
+
+/* Legend styles for HTML swatches */
+.legend {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 2px solid #d3d6da;
+}
+
+.legend-swatch.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+}
+
+.legend-swatch.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+}
+
+.legend-swatch.absent {
+  background-color: #ffffff;
+  border-color: #d3d6da;
+}
