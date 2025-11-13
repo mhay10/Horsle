@@ -10,9 +10,53 @@ export function useGameState() {
   const [won, setWon] = useState(false);
   const [revealingRow, setRevealingRow] = useState(null);
   const [keyboardStatus, setKeyboardStatus] = useState({});
+  const [validWords, setValidWords] = useState(new Set());
+  const [notification, setNotification] = useState({ message: '', visible: false });
+  const [notificationTimeout, setNotificationTimeout] = useState(null);
+
+  // Load valid words from file
+  useEffect(() => {
+    fetch('/src/data/valid-words.txt')
+      .then((response) => response.text())
+      .then((text) => {
+        const words = text
+          .split('\n')
+          .map((word) => word.trim().toUpperCase())
+          .filter((word) => word.length === WORD_LENGTH);
+        setValidWords(new Set(words));
+      })
+      .catch((error) => {
+        console.error('Error loading valid words:', error);
+      });
+  }, []);
 
   const submitGuess = useCallback(() => {
     if (currentGuess.length !== WORD_LENGTH || gameOver) return;
+
+    // Validate that the guess is in the valid words list
+    if (!validWords.has(currentGuess)) {
+      // If notification is already showing, don't trigger a new one
+      if (notification.visible) return;
+
+      // Clear any existing timeouts
+      if (notificationTimeout) {
+        clearTimeout(notificationTimeout);
+      }
+
+      setNotification({ message: 'Invalid word', visible: true });
+      
+      const hideTimeout = setTimeout(() => {
+        setNotification((prev) => ({ ...prev, visible: false }));
+      }, 1000);
+      
+      const clearTimeout = setTimeout(() => {
+        setNotification({ message: '', visible: false });
+        setNotificationTimeout(null);
+      }, 1300);
+      
+      setNotificationTimeout(clearTimeout);
+      return;
+    }
 
     const newGuesses = [...guesses, currentGuess];
     setGuesses(newGuesses);
@@ -34,7 +78,7 @@ export function useGameState() {
     }, WORD_LENGTH * 300 + 100);
 
     setCurrentGuess('');
-  }, [currentGuess, gameOver, guesses]);
+  }, [currentGuess, gameOver, guesses, validWords, notification.visible, notificationTimeout]);
 
   const handleKeyPress = useCallback(
     (e) => {
@@ -88,6 +132,7 @@ export function useGameState() {
     won,
     revealingRow,
     keyboardStatus,
+    notification,
     submitGuess,
     handleKeyClick,
     resetGame,

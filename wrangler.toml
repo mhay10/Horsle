@@ -1,0 +1,7 @@
+name = "horsle"
+compatibility_date = "2025-11-13"
+
+pages_build_output_dir = "./dist"
+
+[site]
+bucket = "./dist"

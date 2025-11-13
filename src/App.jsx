@@ -4,6 +4,7 @@ import Keyboard from './components/Keyboard';
 import GameOverPanel from './components/GameOverPanel';
 import Header from './components/Header';
 import Instructions from './components/Instructions';
+import Notification from './components/Notification';
 import { useGameState } from './hooks/useGameState';
 
 export default function App() {
@@ -14,14 +15,15 @@ export default function App() {
     won,
     revealingRow,
     keyboardStatus,
+    notification,
     handleKeyClick,
     resetGame,
   } = useGameState();
 
   return (
     <div className="App">
-      <Header />
       <div className="game-container">
+        <Header />
         <Grid
           guesses={guesses}
           currentGuess={currentGuess}
@@ -33,6 +35,8 @@ export default function App() {
 
         <Instructions />
       </div>
+
+      <Notification message={notification.message} visible={notification.visible} />
 
       {gameOver && (
         <GameOverPanel won={won} guessCount={guesses.length} onReset={resetGame} />
