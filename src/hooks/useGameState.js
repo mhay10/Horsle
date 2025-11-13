@@ -16,7 +16,7 @@ export function useGameState() {
 
   // Load valid words from file
   useEffect(() => {
-    fetch('/src/data/valid-words.txt')
+    fetch('/valid-words.txt')
       .then((response) => response.text())
       .then((text) => {
         const words = text
